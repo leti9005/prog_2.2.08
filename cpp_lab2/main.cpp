@@ -40,12 +40,9 @@ struct String {
         {
             if (this->text[i] != str.text[i])
             {
-                cout << this->text << " | " << str.to_string() << " | " << "false" << endl;
                 return false;
             }
         }
-
-        cout << this->text << " | " << str.to_string() << " | " << "true" << endl;
 
         return true;
     }
@@ -239,12 +236,8 @@ int main()
         return 0;
     }
 
-    cout << "repeated_node: " << repeated_node->data->to_string() << endl;
-
     auto word = words._head;
     words.repeat(repeated_node, repeat_count);
-
-    cout << "first word: " << word->data->to_string() << endl;
 
     words.write_to_file(output_file_name);
 }
