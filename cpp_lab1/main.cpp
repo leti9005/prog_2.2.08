@@ -3,8 +3,8 @@
 
 using namespace std;
 
-
 struct State {
+    char marker = '@';
     char nonRepeatedCharacter;
     char text[1000];
 };
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     cout << "Enter the symbol that won't be repeated: " << endl;
     cin >> state.nonRepeatedCharacter;
 
-    for (unsigned i = 0; i < strlen(state.text); i++)
+    for (unsigned i = 0; state.text[i] != state.marker; i++)
     {
         if (state.text[i] != state.nonRepeatedCharacter)
         {
@@ -52,5 +52,10 @@ int main(int argc, char* argv[])
         }
     }
 
-    cout << state.text;
+    for (unsigned i = 0; state.text[i] != state.marker; i++)
+    {
+        cout << state.text[i];
+    }
+
+    cout << endl;
 }
