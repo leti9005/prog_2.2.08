@@ -145,51 +145,28 @@ struct LinkedList
             else
             {
                 fout << marker;
+                cout << endl;
                 break;
             }
         }
     }
+
+    ~LinkedList()
+    {
+        while (_head != nullptr) {
+			auto temp = _head->next;
+			delete _head;
+			_head = temp;
+		}
+    }
 };
-
-// LinkedList create_list_from_text_file(ifstream* stream, const char marker)
-// {
-//     Node firstNode;
-//     auto currentNode = &firstNode;
-
-//     while (!(*stream).eof())
-//     {
-//         char c = stream->get();
-
-//         if (c == '\n' || c == marker)
-//             break;
-
-//         if (c != ' ')
-//         {
-//             currentNode->data->append(c);
-//         }
-//         else
-//         {
-//             // Ввод не должен заканчиваться маркером,
-//             // иначе в конце будет лишняя нода.
-//             currentNode->next = new Node;
-//             currentNode = currentNode->next;
-//         }
-//     }
-
-//     LinkedList list(&firstNode);
-
-//     return list;
-// }
 
 
 const char input_file_name[] = "input.txt";
 const char output_file_name[] = "output.txt";
 
-// 1 13: Вставить 13) заданное число элементов перед всеми элементами, имеющими заданное значение;
-
 int main()
 {
-
     Node firstNode;
     auto currentNode = &firstNode;
 
@@ -216,9 +193,7 @@ int main()
         currentNode->data->append(c);
     }
 
-    LinkedList words(&firstNode);
-
-    // auto words = create_list_from_text_file(&fin, marker);
+    auto words = new LinkedList(&firstNode);
 
     int repeat_count;
     cin >> repeat_count;
@@ -228,7 +203,7 @@ int main()
 
     String repeated_element(str_repeated_element.c_str(), str_repeated_element.length());
 
-    auto repeated_node = words.find(repeated_element);
+    auto repeated_node = words->find(repeated_element);
 
     if (!repeated_node)
     {
@@ -236,8 +211,12 @@ int main()
         return 0;
     }
 
-    auto word = words._head;
-    words.repeat(repeated_node, repeat_count);
+    auto word = words->_head;
+    words->repeat(repeated_node, repeat_count);
 
-    words.write_to_file(output_file_name);
+    words->write_to_file(output_file_name);
+
+    delete words;
+
+    cout << "Deleted internal list successfully." << endl;
 }
