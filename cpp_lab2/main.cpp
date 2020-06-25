@@ -29,21 +29,23 @@ struct String {
     {
         this->text[length++] = c;
 
-        if (c == '\0') length--;
+        if (c == marker) length--;
     }
 
     bool equals(String str)
     {
+        if (this->length != str.length) return false;
+
         for (size_t i = 0; i < this->length; i++)
         {
             if (this->text[i] != str.text[i])
             {
-                cout << this->text << " | " << str.text << " | " << "false" << endl;
+                cout << this->text << " | " << str.to_string() << " | " << "false" << endl;
                 return false;
             }
         }
 
-        cout << this->text << " | " << str.text << " | " << "true" << endl;
+        cout << this->text << " | " << str.to_string() << " | " << "true" << endl;
 
         return true;
     }
@@ -55,24 +57,11 @@ struct String {
             dest->append(this->text[i]);
         }
 
-        dest->append('\0');
-    }
-
-    size_t get_marker_pos() const {
-        size_t i = 0;
-        while(this->text[i] != marker && i < this->length)
-        {
-            i++;
-        }
-
-        return i;
+        dest->append(marker);
     }
 
     string to_string() const {
-        return string(
-            this->text,
-            this->get_marker_pos()
-        );
+        return string(this->text, this->length);
     }
 };
 
@@ -119,7 +108,6 @@ struct LinkedList
             }
         }
 
-        // cout << "found node with value of: " << node->data->text << endl;
         return node;
     }
 
@@ -147,9 +135,8 @@ struct LinkedList
 
         while (true)
         {
-            // string s(word->data->text);
-            fout << word->data->text;
-            cout << word->data->text;
+            fout << word->data->to_string();
+            cout << word->data->to_string();
 
             if (word->next)
             {
@@ -160,6 +147,7 @@ struct LinkedList
             }
             else
             {
+                fout << marker;
                 break;
             }
         }
@@ -213,14 +201,15 @@ int main()
     {
         char c = fin.get();
 
-        if (c == marker || c == ' ')
+        if (c == marker)
         {
-            currentNode->data->append('\0');
+            currentNode->data->append(marker);
             break;
         }
 
         if (c == ' ')
         {
+            currentNode->data->append(marker);
             currentNode->next = new Node;
             currentNode = currentNode->next;
 
@@ -243,12 +232,19 @@ int main()
     String repeated_element(str_repeated_element.c_str(), str_repeated_element.length());
 
     auto repeated_node = words.find(repeated_element);
-    cout << "repeated_node: " << repeated_node->data->text << endl;
+
+    if (!repeated_node)
+    {
+        cout << "Can't find the word " << str_repeated_element << " in the text." << endl;
+        return 0;
+    }
+
+    cout << "repeated_node: " << repeated_node->data->to_string() << endl;
 
     auto word = words._head;
     words.repeat(repeated_node, repeat_count);
 
-    cout << "first word: " << word->data->text << endl;
+    cout << "first word: " << word->data->to_string() << endl;
 
     words.write_to_file(output_file_name);
 }
